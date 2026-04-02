@@ -6,7 +6,7 @@ PHI_KEYWORDS = ["history", "social", "family", "treatment", "therapy", "CPT", "d
 FERPA = ["attendance", "class", "grade", "suspension", "disciplinary", "expulsion"]
 GDPR = ["religion", "union", "resume"]
 
-def pii_scan(text):
+def text_scan(text):
     findings = {
         #re.findall - finds all matches of regular expressions
         #\S - Letters, numbers, symbols, and punctuation
