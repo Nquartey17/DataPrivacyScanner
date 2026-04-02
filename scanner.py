@@ -2,7 +2,7 @@ import re
 
 PII_KEYWORDS = ["date of birth","dob", "born", "ssn", "social security", "email", "phone number"]
 PHI_KEYWORDS = ["history", "social", "family", "treatment", "therapy", "CPT", "diagnosis",
-                "DX", "lab", "results", "physician", "doctor"]
+                "DX", "lab", "results", "physician", "doctor", "MRN", "patient"]
 FERPA = ["attendance", "class", "grade", "suspension", "disciplinary", "expulsion"]
 GDPR = ["religion", "union", "resume"]
 
@@ -24,6 +24,21 @@ def keyword_finder(text, keywords):
     lowercase_text = text.lower()
     # result = []
     # for word in keywords:
-    #     if word.lower in lowercase_text:
+    #     if word.lower() in lowercase_text:
     #         result.append(word)
     return [word for word in keywords if word.lower() in lowercase_text]
+
+if __name__ == "__main__":
+    sample_text = """
+    John Doe was born on 01/15/1990.
+    His email is john.doe@example.com and phone number is 123-456-7890.
+    SSN: 123-45-6789.
+    456-18-8564
+    He visited the doctor for diagnosis and treatment.
+    """
+
+    print("PII Scan Results:")
+    print(pii_scan(sample_text))
+
+    print("Keywords found:")
+    print(keyword_finder(sample_text, PII_KEYWORDS + PHI_KEYWORDS))
