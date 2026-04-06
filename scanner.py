@@ -7,25 +7,26 @@ FERPA = ["attendance", "class", "grade", "suspension", "disciplinary", "expulsio
 GDPR = ["religion", "union", "resume"]
 
 def text_scan(text):
-    findings = {
+    results = {
         #re.findall - finds all matches of regular expressions
         #\S - Letters, numbers, symbols, and punctuation
         "emails": re.findall(r'\S+@\S+', text),
         "phones": re.findall(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b', text),
-        "ssn": re.findall(r'\b\d{3}-\d{2}-\d{4}\b', text),
-        "dob": re.findall(r'\b(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|'
-                          r'\d{4}[/-]\d{1,2}[/-]\d{1,2})\b',
-                          text)
+        "ssn": re.findall(r'\b\d{3}-\d{2}-\d{4}\b', text)
     }
-    return findings
+
+    # count = {
+    #     "emails": len(results["emails"]),
+    #     "phones": len(results["phones"]),
+    #     "ssn": len(results["ssn"]),
+    # }
+    count = {key: len(value) for key, value in results.items()}
+
+    return {"results":results, "count": count}
 
 # combine lists if you want to highlight instances of all words
 def keyword_finder(text, keywords):
     lowercase_text = text.lower()
-    # result = []
-    # for word in keywords:
-    #     if word.lower() in lowercase_text:
-    #         result.append(word)
     return [word for word in keywords if word.lower() in lowercase_text]
 
 if __name__ == "__main__":
@@ -38,7 +39,7 @@ if __name__ == "__main__":
     """
 
     print("PII Scan Results:")
-    print(pii_scan(sample_text))
+    print(text_scan(sample_text))
 
-    print("Keywords found:")
-    print(keyword_finder(sample_text, PII_KEYWORDS + PHI_KEYWORDS))
+    # print("Keywords found:")
+    # print(keyword_finder(sample_text, PII_KEYWORDS + PHI_KEYWORDS))

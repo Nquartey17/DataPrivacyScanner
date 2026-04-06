@@ -18,7 +18,7 @@ def upload_file():
     content = file.read().decode("utf-8")
 
     results = text_scan(content)
-    return {"results": results }
+    return results
 
 if __name__ == "__main__":
     app.run(debug=True)
