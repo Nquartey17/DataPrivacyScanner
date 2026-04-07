@@ -1,10 +1,12 @@
 import re
 
-PII_KEYWORDS = ["date of birth","dob", "born", "ssn", "social security", "email", "phone number"]
+PII_KEYWORDS = ["date of birth","dob", "born", "ssn", "social security", "email", "phone number", "DL", "driver's license",
+                "alien", "passport"]
 PHI_KEYWORDS = ["history", "social", "family", "treatment", "therapy", "CPT", "diagnosis",
                 "DX", "lab", "results", "physician", "doctor", "MRN", "patient"]
 FERPA = ["attendance", "class", "grade", "suspension", "disciplinary", "expulsion"]
 GDPR = ["religion", "union", "resume"]
+ADDITIONAL = ["biometric", "fingerprint", "security questions", "username", "password", "PW", "user"]
 
 def text_scan(text):
     results = {

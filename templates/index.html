@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Privacy Scanner</title>
+</head>
+<body>
+
+<h1>Data Privacy Scanner</h1>
+<form action="" method="POST" enctype="multipart/form-data">
+  <label for="myFile">Select a file:</label>
+  <input type="file" id="myFile" name="filename">
+  <button type="submit">Upload</button>
+</form>
+
+<h3>Select additional keywords</h3>
+<input type="checkbox" id="pii" name="keywords[]" value="PII">
+<label for="pii"> PII</label><br>
+<input type="checkbox" id="phi" name="keywords[]" value="PHI">
+<label for="phi"> PHI</label><br>
+<input type="checkbox" id="gdpr" name="keywords[]" value="GDPR">
+<label for="gdpr"> GDPR</label><br>
+<input type="checkbox" id="ferpa" name="keywords[]" value="FERPA">
+<label for="ferpa"> FERPA</label><br>
+
+
+
+<h4>PII</h4>
+<div class="dropdown">
+<!--    Dropdown button when CSS and JS are added-->
+  <button class="dropdown-btn" onclick="toggleDropdown()">Select Options</button>
+
+  <div id="dropdownMenu" class="dropdown-content">
+    <!-- Select All -->
+    <label>
+      <input type="checkbox" id="selectAll" onclick="toggleAll(this)">
+      <strong>Select All</strong>
+    </label>
+    <hr>
+
+    <!-- Options -->
+    <label><input type="checkbox" class="option" value="1"> Driver’s license</label>
+    <label><input type="checkbox" class="option" value="2"> State ID</label>
+    <label><input type="checkbox" class="option" value="3"> Alien registration number</label>
+    <label><input type="checkbox" class="option" value="4"> Non-US ID</label>
+    <label><input type="checkbox" class="option" value="5"> Passport</label>
+  </div>
+</div>
+
+
+</body>
+</html>

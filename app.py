@@ -1,11 +1,11 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 from scanner import text_scan
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "<h1>Hello World</h1>"
+    return render_template("index.html")
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
