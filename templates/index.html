@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Data Privacy Scanner</title>
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Script runs before jquery, adding defer to let jquery run first  -->
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+
 </head>
 <body>
 
@@ -13,40 +18,41 @@
   <button type="submit">Upload</button>
 </form>
 
-<h3>Select additional keywords</h3>
-<input type="checkbox" id="pii" name="keywords[]" value="PII">
-<label for="pii"> PII</label><br>
-<input type="checkbox" id="phi" name="keywords[]" value="PHI">
-<label for="phi"> PHI</label><br>
-<input type="checkbox" id="gdpr" name="keywords[]" value="GDPR">
-<label for="gdpr"> GDPR</label><br>
-<input type="checkbox" id="ferpa" name="keywords[]" value="FERPA">
-<label for="ferpa"> FERPA</label><br>
-
-
-
 <h4>PII</h4>
-<div class="dropdown">
-<!--    Dropdown button when CSS and JS are added-->
-  <button class="dropdown-btn" onclick="toggleDropdown()">Select Options</button>
+<div class="dropdown" data-control="checkbox-dropdown">
+  <label class="dropdown-label">Select</label>
 
-  <div id="dropdownMenu" class="dropdown-content">
-    <!-- Select All -->
-    <label>
-      <input type="checkbox" id="selectAll" onclick="toggleAll(this)">
-      <strong>Select All</strong>
+  <div class="dropdown-list">
+    <a href="#" data-toggle="check-all" class="dropdown-option">
+      Select All
+    </a>
+
+    <label class="dropdown-option">
+      <input type="checkbox" name="dropdown-group" value="Opt 1" />
+      Driver’s license
     </label>
-    <hr>
 
-    <!-- Options -->
-    <label><input type="checkbox" class="option" value="1"> Driver’s license</label>
-    <label><input type="checkbox" class="option" value="2"> State ID</label>
-    <label><input type="checkbox" class="option" value="3"> Alien registration number</label>
-    <label><input type="checkbox" class="option" value="4"> Non-US ID</label>
-    <label><input type="checkbox" class="option" value="5"> Passport</label>
+    <label class="dropdown-option">
+      <input type="checkbox" name="dropdown-group" value="Opt 2" />
+      State ID
+    </label>
+
+    <label class="dropdown-option">
+      <input type="checkbox" name="dropdown-group" value="Opt 3" />
+      Alien registration number
+    </label>
+
+    <label class="dropdown-option">
+      <input type="checkbox" name="dropdown-group" value="Opt 4" />
+      Non-US ID
+    </label>
+
+    <label class="dropdown-option">
+      <input type="checkbox" name="dropdown-group" value="Opt 5" />
+      Passport
+    </label>
   </div>
 </div>
-
 
 </body>
 </html>
