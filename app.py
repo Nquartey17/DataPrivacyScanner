@@ -7,7 +7,7 @@ app = Flask(__name__)
 def home():
     return render_template("index.html")
 
-@app.route("/upload", methods=["POST"])
+@app.route("/results", methods=["POST"])
 def upload_file():
     file = request.files.get("test")
 
@@ -16,9 +16,9 @@ def upload_file():
         return {"error": "File missing"}, 400
 
     content = file.read().decode("utf-8")
-
     results = text_scan(content)
-    return results
+
+    return render_template("results.html", results=results)
 
 if __name__ == "__main__":
     app.run(debug=True)
