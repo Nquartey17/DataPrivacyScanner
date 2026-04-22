@@ -40,8 +40,8 @@ if __name__ == "__main__":
     He visited the doctor for diagnosis and treatment.
     """
 
-    print("PII Scan Results:")
-    print(text_scan(sample_text))
+    # print("PII Scan Results:")
+    # print(text_scan(sample_text))
 
-    # print("Keywords found:")
-    # print(keyword_finder(sample_text, PII_KEYWORDS + PHI_KEYWORDS))
+    print("Keywords found:")
+    print(keyword_finder(sample_text, PII_KEYWORDS + PHI_KEYWORDS))
