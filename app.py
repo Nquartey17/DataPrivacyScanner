@@ -2,8 +2,15 @@ from flask import Flask, request, render_template
 from scanner import text_scan, keyword_finder
 from conversion import extract_text
 
-PII_KEYWORDS = ["date of birth","dob", "born", "ssn", "social security", "email", "phone number", "DL", "driver's license",
-                "alien", "passport"]
+#Changing PII_KEYWORDS to dictionary for multiple terms
+#Idea: Add an option to type custom keywords
+PII_KEYWORDS = {
+    "dl":["DL","driver's license", "license", "learner's permit"],
+    "sid": ["state id", "identification card", "SID"],
+    "a_num": ["alien registration number", "A-number", "USCIS"],
+    "passport": ["passport", "passport number"]
+}
+default_keywords = ["date of birth","dob", "born", "ssn", "social security", "email", "phone number"]
 
 app = Flask(__name__)
 
@@ -22,7 +29,14 @@ def upload_file():
     try:
         content = extract_text(file)
         results = text_scan(content)
-        keywords = keyword_finder(content, PII_KEYWORDS)
+        pii_selections = request.form.getlist("pii_dropdown")
+        all_keywords = default_keywords.copy()
+
+        for selection in pii_selections:
+            if selection in PII_KEYWORDS:
+                all_keywords.extend(PII_KEYWORDS[selection])
+
+        keywords = keyword_finder(content, all_keywords)
 
         return render_template("results.html", results=results, keywords=keywords)
 

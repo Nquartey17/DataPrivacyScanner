@@ -16,46 +16,43 @@
 
 <h1>Data Privacy Scanner</h1>
 <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
-  <label type="file" name="test">Select a file:</label>
+  <label>Select a file:</label>
   <input type="file"  name="test">
+
+  <h4>PII</h4>
+
+  <div class="dropdown" data-control="checkbox-dropdown">
+    <label class="dropdown-label">Select</label>
+
+    <div class="dropdown-list">
+
+      <a href="#" data-toggle="check-all" class="dropdown-option">
+        Select All
+      </a>
+
+      <label class="dropdown-option">
+        <input type="checkbox" name="pii_dropdown" value="dl" />
+        Driver’s license
+      </label>
+
+      <label class="dropdown-option">
+        <input type="checkbox" name="pii_dropdown" value="sid" />
+        State ID
+      </label>
+
+      <label class="dropdown-option">
+        <input type="checkbox" name="pii_dropdown" value="a_num" />
+        Alien registration number
+      </label>
+
+      <label class="dropdown-option">
+        <input type="checkbox" name="pii_dropdown" value="passport  " />
+        Passport
+      </label>
+    </div>
+  </div>
   <button type="submit">Upload</button>
 </form>
-
-<h4>PII</h4>
-<div class="dropdown" data-control="checkbox-dropdown">
-  <label class="dropdown-label">Select</label>
-
-  <div class="dropdown-list">
-    <a href="#" data-toggle="check-all" class="dropdown-option">
-      Select All
-    </a>
-
-    <label class="dropdown-option">
-      <input type="checkbox" name="dropdown-group" value="Opt 1" />
-      Driver’s license
-    </label>
-
-    <label class="dropdown-option">
-      <input type="checkbox" name="dropdown-group" value="Opt 2" />
-      State ID
-    </label>
-
-    <label class="dropdown-option">
-      <input type="checkbox" name="dropdown-group" value="Opt 3" />
-      Alien registration number
-    </label>
-
-    <label class="dropdown-option">
-      <input type="checkbox" name="dropdown-group" value="Opt 4" />
-      Non-US ID
-    </label>
-
-    <label class="dropdown-option">
-      <input type="checkbox" name="dropdown-group" value="Opt 5" />
-      Passport
-    </label>
-  </div>
-</div>
 
 </body>
 </html>
