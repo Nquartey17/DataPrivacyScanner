@@ -1,8 +1,7 @@
 # Converting other file types (pdf, docx, csv, xlsx) to txt
 import os
-import io
 import pandas
-from PyPDF2 import PdfReader
+import pdfplumber
 from docx import Document
 
 def extract_text(file):
@@ -13,17 +12,18 @@ def extract_text(file):
         return file.read().decode("utf-8")
 
     elif extension == ".pdf":
-        pdf = PdfReader(file)
         text = ""
 
-        for page in pdf.pages:
-            page_text = page.extract_text()
-            if page_text:
-                text += page_text + "\n"
+        with pdfplumber.open(file) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text()
+
+                if page_text:
+                    text += page_text + "\n"
 
         return text
 
-    elif extension == "'.docx":
+    elif extension == ".docx":
         doc = Document(file)
         #Return list of all paragraphs, loop through all paragraphs, extract text from each, make a list of strings
         #Join combines all paragraph strings into one string, seperated by newlines
