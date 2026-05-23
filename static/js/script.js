@@ -1,3 +1,9 @@
+$(document).ready(function () {
+  $(".menu-icon").on("click", function () {
+    $("nav ul").toggleClass("showing");
+  });
+});
+
 (function($) {
   var CheckboxDropdown = function(el) {
     var _this = this;
