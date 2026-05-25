@@ -51,94 +51,34 @@
   <input type="file"  name="test">
 
   <h4>PII</h4>
-
-  <div class="dropdown" data-control="checkbox-dropdown">
-    <label class="dropdown-label">Select</label>
-
-    <div class="dropdown-list">
-
-      <a href="#" data-toggle="check-all" class="dropdown-option">
-        Select All
-      </a>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="pii_dropdown" value="dl" />
-        Driver’s license
-      </label>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="pii_dropdown" value="sid" />
-        State ID
-      </label>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="pii_dropdown" value="a_num" />
-        Alien registration number
-      </label>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="pii_dropdown" value="passport" />
-        Passport
-      </label>
-    </div>
+  <div class="container" data-control="checkbox-dropdown">
+    <ul class="ks-cboxtags">
+      <li><input type="checkbox" name="pii_dropdown" id="dl" value="dl" checked><label for="dl">Driver's License</label></li>
+      <li><input type="checkbox" name="pii_dropdown" id="sid" value="sid"><label for="sid">State ID</label></li>
+      <li><input type="checkbox" name="pii_dropdown" id="a_num" value="a_num"><label for="a_num">Alien Registration Number</label></li>
+      <li><input type="checkbox" name="pii_dropdown" id="passport" value="passport"><label for="passport">Passport</label></li>
+      <li><input type="checkbox" name="pii_dropdown" id="mid" value="mid"><label for="mid">Military ID</label></li>
+    </ul>
   </div>
 
   <br><br>
    <h4>PHI</h4>
 
-  <div class="dropdown" data-control="checkbox-dropdown">
-    <label class="dropdown-label">Select</label>
-
-    <div class="dropdown-list">
-
-      <a href="#" data-toggle="check-all" class="dropdown-option">
-        Select All
-      </a>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="phi_dropdown" value="hx" />
-        Medical History
-      </label>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="phi_dropdown" value="tx" />
-        Treatment
-      </label>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="phi_dropdown" value="dx" />
-        Diagnosis
-      </label>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="phi_dropdown" value="rx" />
-        Prescription/Medication
-      </label>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="phi_dropdown" value="lab" />
-        Lab Results
-      </label>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="phi_dropdown" value="phys" />
-        Reffering/Attending Physician
-      </label>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="phi_dropdown" value="mrn" />
-        Medical Record Number
-      </label>
-
-      <label class="dropdown-option">
-        <input type="checkbox" name="phi_dropdown" value="pid" />
-        Patient ID
-      </label>
-
-
-    </div>
+  <div class="container" data-control="checkbox-dropdown">
+    <ul class="ks-cboxtags">
+      <li><input type="checkbox" name="phi_dropdown" id="hx" value="hx" checked><label for="hx">Medical History</label></li>
+      <li><input type="checkbox" name="phi_dropdown" id="tx" value="tx" checked><label for="tx">Treatment</label></li>
+      <li><input type="checkbox" name="phi_dropdown" id="dx" value="dx" checked><label for="dx">Diagnosis</label></li>
+      <li><input type="checkbox" name="phi_dropdown" id="rx" value="rx" checked><label for="rx">Prescription/Medication</label></li>
+      <li><input type="checkbox" name="phi_dropdown" id="lab" value="lab" checked><label for="lab">Lab Results</label></li>
+      <li><input type="checkbox" name="phi_dropdown" id="phys" value="phys" checked><label for="phys">Reffering/Attending Physician</label></li>
+      <li><input type="checkbox" name="phi_dropdown" id="mrn" value="mrn" checked><label for="mrn">Medical Record Number</label></li>
+      <li><input type="checkbox" name="phi_dropdown" id="pid" value="pid" checked><label for="pid">Patient ID</label></li>
+    </ul>
   </div>
+
   <button type="submit">Upload</button>
+
 </form>
 
 </body>

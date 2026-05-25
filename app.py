@@ -12,7 +12,8 @@ PII_KEYWORDS = {
     "dl":["DL","driver's license", "license", "learner's permit"],
     "sid": ["state id", "identification card", "SID"],
     "a_num": ["alien registration number", "A-number", "USCIS"],
-    "passport": ["passport", "passport number"]
+    "passport": ["passport", "passport number"],
+    "mid": ["dod"]
 }
 
 PHI_KEYWORDS = {
@@ -29,7 +30,7 @@ PHI_KEYWORDS = {
 def keyword_addition(list_name, keyword_list, all_keywords):
     for selection in list_name:
         if selection in keyword_list:
-            all_keywords.extend(PII_KEYWORDS[selection])
+            all_keywords.extend(keyword_list[selection])
 
 app = Flask(__name__)
 
