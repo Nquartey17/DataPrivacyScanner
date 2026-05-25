@@ -40,7 +40,7 @@ def home():
 
 @app.route("/results", methods=["POST"])
 def upload_file():
-    file = request.files.get("test")
+    file = request.files.get("files")
 
     #If file doesn't exist, prevent crashing
     if not file:
