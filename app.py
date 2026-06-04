@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 from scanner import text_scan, keyword_finder
 from conversion import extract_text
+from dashboard import init_dashboard
 
 #Changing PII_KEYWORDS to dictionary for multiple terms
 #Idea: Add an option to type custom keywords
@@ -33,6 +34,8 @@ def keyword_addition(list_name, keyword_list, all_keywords):
             all_keywords.extend(keyword_list[selection])
 
 app = Flask(__name__)
+
+init_dashboard(app)
 
 @app.route("/")
 def home():
