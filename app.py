@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template
 from scanner import text_scan, keyword_finder
 from conversion import extract_text
-from dashboard import init_dashboard
 
 #Changing PII_KEYWORDS to dictionary for multiple terms
 #Idea: Add an option to type custom keywords
@@ -14,7 +13,7 @@ PII_KEYWORDS = {
     "sid": ["state id", "identification card", "SID"],
     "a_num": ["alien registration number", "A-number", "USCIS"],
     "passport": ["passport", "passport number"],
-    "mid": ["dod"]
+    "mid": ["dod", "military"]
 }
 
 PHI_KEYWORDS = {
@@ -28,14 +27,27 @@ PHI_KEYWORDS = {
     "pid": ["pid", "patient id", "pt id", "ptid", "patient number"]
 }
 
+FINANCE_HDV = {
+    "bnk":["ABA", "bank account", "bank account number", "checking", "savings"],
+    "routing":["routing", "RTN", "sort code"],
+    "fncl":["IRA", "stock", "roth", "investment", "retirement"],
+    "crdt":["credit card", "debit card", "credit"],
+    "hdv":["insurance", "policy number", "member id", "group number", "group id", "plan number"],
+    "mcd": ["medicare", "medicaid", "tricare"]
+}
+
+SECURITY = {
+    "user": ["user id", "username", "password", "pwd", "user", "login", "log in"],
+    "sq": ["security question", "answer"],
+    "dsig": ["digital signature", "electronically signed"]
+}
+
 def keyword_addition(list_name, keyword_list, all_keywords):
     for selection in list_name:
         if selection in keyword_list:
             all_keywords.extend(keyword_list[selection])
 
 app = Flask(__name__)
-
-init_dashboard(app)
 
 @app.route("/")
 def home():
@@ -54,10 +66,14 @@ def upload_file():
         results = text_scan(content)
         pii_selections = request.form.getlist("pii_dropdown")
         phi_selections = request.form.getlist("phi_dropdown")
+        finance_hdv = request.form.getlist("finance_hdv")
+        security = request.form.getlist("security")
         all_keywords = default_keywords.copy()
 
         keyword_addition(pii_selections, PII_KEYWORDS, all_keywords)
         keyword_addition(phi_selections, PHI_KEYWORDS, all_keywords)
+        keyword_addition(finance_hdv, FINANCE_HDV, all_keywords)
+        keyword_addition(security, SECURITY, all_keywords)
 
         keywords = keyword_finder(content, all_keywords)
 
