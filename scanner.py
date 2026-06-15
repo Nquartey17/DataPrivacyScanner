@@ -9,22 +9,24 @@ GDPR = ["religion", "union", "resume"]
 ADDITIONAL = ["biometric", "fingerprint", "security questions", "username", "password", "PW", "user"]
 
 def text_scan(text):
-    results = {
+    return {
         #re.findall - finds all matches of regular expressions
         #\S - Letters, numbers, symbols, and punctuation
+        "ssn": re.findall(r'\b\d{3}-\d{2}-\d{4}\b', text),
         "emails": re.findall(r'\S+@\S+', text),
-        "phones": re.findall(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b', text),
-        "ssn": re.findall(r'\b\d{3}-\d{2}-\d{4}\b', text)
+        "phones": re.findall(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b', text)
     }
 
-    # count = {
-    #     "emails": len(results["emails"]),
-    #     "phones": len(results["phones"]),
-    #     "ssn": len(results["ssn"]),
-    # }
-    count = {key: len(value) for key, value in results.items()}
+    # count = {key: len(value) for key, value in results.items()}
+    #
+    # return {"results":results, "count": count}
 
-    return {"results":results, "count": count}
+def keyword_count(text, keyword_list):
+    text = text.lower()
+
+    return {
+        keyword: text.count(keyword.lower()) for keyword in keyword_list
+    }
 
 # combine lists if you want to highlight instances of all words
 def keyword_finder(text, keywords):
