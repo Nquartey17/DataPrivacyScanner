@@ -19,6 +19,13 @@ def convert_to_labels(label_dict,count_dict):
         for key, value in count_dict.items()
     }
 
+def checkbox_selections(selected_options, keyword_list):
+    return {
+        key: keyword_list[key]
+        for key in selected_options
+        if key in keyword_list
+    }
+
 app = Flask(__name__)
 dash_app = init_dashboard(app)
 
@@ -37,6 +44,8 @@ def upload_file():
     try:
         content = extract_text(file)
         results = text_scan(content)
+
+        #Get selected inputs from index.html checklist
         pii_selections = request.form.getlist("pii_dropdown")
         phi_selections = request.form.getlist("phi_dropdown")
         finance_hdv = request.form.getlist("finance_hdv")
@@ -55,21 +64,26 @@ def upload_file():
 
         keywords = keyword_finder(content, all_keywords)
 
-        pii_count = keyword_count(content, PII_KEYWORDS)
+        # returning new dictionary for selected terms and only displaying selected terms
+        selected_pii = checkbox_selections(pii_selections, PII_KEYWORDS)
+        pii_count = keyword_count(content, selected_pii)
         pii_count_display = convert_to_labels(PII_LABELS, pii_count)
-        pii_keywords = keyword_finder(content, PII_KEYWORDS)
+        pii_keywords = keyword_finder(content, selected_pii)
 
-        phi_count = keyword_count(content, PHI_KEYWORDS)
+        selected_phi = checkbox_selections(phi_selections, PHI_KEYWORDS)
+        phi_count = keyword_count(content, selected_phi)
         phi_count_display = convert_to_labels(PHI_LABELS, phi_count)
-        phi_keywords = keyword_finder(content, PHI_KEYWORDS)
+        phi_keywords = keyword_finder(content, selected_phi)
 
-        finance_hdv_count = keyword_count(content, FINANCE_HDV)
+        selected_finance = checkbox_selections(finance_hdv, FINANCE_HDV)
+        finance_hdv_count = keyword_count(content, selected_finance)
         finance_hdv_display = convert_to_labels(FINANCE_HDV_LABELS, finance_hdv_count)
-        fhdv_keywords = keyword_finder(content, FINANCE_HDV)
+        fhdv_keywords = keyword_finder(content, selected_finance)
 
-        security_count = keyword_count(content, SECURITY)
+        selected_security = checkbox_selections(security, SECURITY)
+        security_count = keyword_count(content, selected_security)
         security_display = convert_to_labels(SECURITY_LABELS, security_count)
-        sq_keywords = keyword_finder(content, SECURITY)
+        sq_keywords = keyword_finder(content, selected_security)
 
         return render_template("results.html", results=results, keywords=keywords,
                                pii_count=pii_count_display, pii_keywords=pii_keywords, phi_count=phi_count_display, phi_keywords=phi_keywords,
