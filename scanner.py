@@ -33,6 +33,28 @@ def keyword_finder(text, keywords):
     lowercase_text = text.lower()
     return [word for word in keywords if word.lower() in lowercase_text]
 
+def keyword_hits(text, keyword_list):
+    text = text.lower()
+    results = {}
+
+    for category, terms in keyword_list.items():
+        findings = []
+
+        for term in terms:
+            if term.lower() in text:
+                findings.append(term)
+
+        if findings:
+            results[category] = findings
+
+    return results
+
+def terms_to_labels(label_dict, findings_dict):
+    return {
+        label_dict.get(key, key):value for key,value in findings_dict.items()
+    }
+
+
 if __name__ == "__main__":
     sample_text = """
     John Doe was born on 01/15/1990.

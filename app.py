@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template
-from scanner import text_scan, keyword_finder, keyword_count
+from scanner import text_scan, keyword_finder, keyword_count, keyword_hits, terms_to_labels
 from conversion import extract_text
 from dashboard import init_dashboard
 from lists import *
@@ -68,26 +68,30 @@ def upload_file():
         selected_pii = checkbox_selections(pii_selections, PII_KEYWORDS)
         pii_count = keyword_count(content, selected_pii)
         pii_count_display = convert_to_labels(PII_LABELS, pii_count)
-        pii_keywords = keyword_finder(content, selected_pii)
+        pii_keywords = keyword_hits(content, selected_pii)
+        pii_convert = terms_to_labels(PII_LABELS, pii_keywords)
 
         selected_phi = checkbox_selections(phi_selections, PHI_KEYWORDS)
         phi_count = keyword_count(content, selected_phi)
         phi_count_display = convert_to_labels(PHI_LABELS, phi_count)
-        phi_keywords = keyword_finder(content, selected_phi)
+        phi_keywords = keyword_hits(content, selected_phi)
+        phi_convert = terms_to_labels(PHI_LABELS, phi_keywords)
 
         selected_finance = checkbox_selections(finance_hdv, FINANCE_HDV)
         finance_hdv_count = keyword_count(content, selected_finance)
         finance_hdv_display = convert_to_labels(FINANCE_HDV_LABELS, finance_hdv_count)
-        fhdv_keywords = keyword_finder(content, selected_finance)
+        fhdv_keywords = keyword_hits(content, selected_finance)
+        fhdv_convert = terms_to_labels(FINANCE_HDV_LABELS, fhdv_keywords)
 
         selected_security = checkbox_selections(security, SECURITY)
         security_count = keyword_count(content, selected_security)
         security_display = convert_to_labels(SECURITY_LABELS, security_count)
-        sq_keywords = keyword_finder(content, selected_security)
+        sq_keywords = keyword_hits(content, selected_security)
+        sq_convert = terms_to_labels(SECURITY_LABELS, sq_keywords)
 
         return render_template("results.html", results=results, keywords=keywords,
-                               pii_count=pii_count_display, pii_keywords=pii_keywords, phi_count=phi_count_display, phi_keywords=phi_keywords,
-                               finance_hdv_count=finance_hdv_display, fhdv_keywords=fhdv_keywords, sq_keywords =sq_keywords,
+                               pii_count=pii_count_display, pii_keywords=pii_convert, phi_count=phi_count_display, phi_keywords=phi_convert,
+                               finance_hdv_count=finance_hdv_display, fhdv_keywords=fhdv_convert, sq_keywords =sq_convert,
                                security_count=security_display)
 
     except ValueError as e:
