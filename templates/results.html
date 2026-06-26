@@ -4,6 +4,13 @@
 
 <h2>Statistics and Findings</h2>
 
+<h5>Number of terms found: </h5>
+<p>Total: {{ risk.total }}</p>
+<p>Low risk terms: {{ risk.low }}/{{ risk.total }}</p>
+<p>Medium risk terms: {{ risk.medium }}/{{ risk.total }}</p>
+<p>High risk terms: {{ risk.high }}/{{ risk.total }}</p>
+<p>Average risk level: {{ risk.average }}</p>
+
 <h5>Extractions: </h5>
 <p>{{ results }}</p>
 

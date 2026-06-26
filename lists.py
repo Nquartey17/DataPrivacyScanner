@@ -81,3 +81,36 @@ SECURITY = {
     "sq": ["security question", "answer"],
     "dsig": ["digital signature", "electronically signed"]
 }
+
+# Keyword risk levels
+TERM_RISK_LEVELS = {
+    "dob":2,
+    "ssn":3,
+    "contact": 1,
+
+    "dl":2,
+    "sid": 2,
+    "a_num": 2,
+    "passport": 2,
+    "mid": 2,
+
+    "hx": 1,
+    "tx": 2,
+    "dx": 2,
+    "rx": 2,
+    "lab": 2,
+    "phys": 1,
+    "mrn": 2,
+    "pid": 2,
+
+    "bnk": 2,
+    "routing":1,
+    "fncl":2,
+    "crdt":2,
+    "hdv": 1,
+    "mcd": 1,
+
+    "user": 3,
+    "sq": 3,
+    "dsig": 3
+}

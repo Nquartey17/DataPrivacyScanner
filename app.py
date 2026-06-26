@@ -4,7 +4,6 @@ from conversion import extract_text
 from dashboard import init_dashboard
 from lists import *
 
-#Changing PII_KEYWORDS to dictionary for multiple terms
 #Idea: Add an option to type custom keywords
 # Idea: Suggested keywords depending on selection. To avoid too many words found, suggest keywords to search
 
@@ -24,6 +23,42 @@ def checkbox_selections(selected_options, keyword_list):
         key: keyword_list[key]
         for key in selected_options
         if key in keyword_list
+    }
+
+def calculate_average_risk(*count_dicts):
+    total_risk = 0
+    total_findings = 0
+
+    low = 0
+    medium = 0
+    high = 0
+
+    for counts in count_dicts:
+        for category, count in counts.items():
+            #Skip term if count == 0
+            if count == 0:
+                continue
+
+            risk = TERM_RISK_LEVELS.get(category, 0)
+
+            total_risk += risk * count
+            total_findings += count
+
+            if risk == 1:
+                low += count
+            elif risk == 2:
+                medium += count
+            elif risk == 3:
+                high += count
+
+    average = round(total_risk / total_findings, 2) if total_findings else 0
+
+    return {
+        "average": average,
+        "low": low,
+        "medium": medium,
+        "high": high,
+        "total": total_findings
     }
 
 app = Flask(__name__)
@@ -89,10 +124,12 @@ def upload_file():
         sq_keywords = keyword_hits(content, selected_security)
         sq_convert = terms_to_labels(SECURITY_LABELS, sq_keywords)
 
+        risk = calculate_average_risk(pii_count,phi_count,finance_hdv_count,security_count)
+
         return render_template("results.html", results=results, keywords=keywords,
                                pii_count=pii_count_display, pii_keywords=pii_convert, phi_count=phi_count_display, phi_keywords=phi_convert,
                                finance_hdv_count=finance_hdv_display, fhdv_keywords=fhdv_convert, sq_keywords =sq_convert,
-                               security_count=security_display)
+                               security_count=security_display,risk=risk)
 
     except ValueError as e:
         return {"error": str(e)}, 500
