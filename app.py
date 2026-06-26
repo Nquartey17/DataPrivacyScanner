@@ -3,6 +3,7 @@ from scanner import text_scan, keyword_finder, keyword_count, keyword_hits, term
 from conversion import extract_text
 from dashboard import init_dashboard
 from lists import *
+import plotly.express as px
 
 #Idea: Add an option to type custom keywords
 # Idea: Suggested keywords depending on selection. To avoid too many words found, suggest keywords to search
@@ -126,10 +127,22 @@ def upload_file():
 
         risk = calculate_average_risk(pii_count,phi_count,finance_hdv_count,security_count)
 
+        # Donut chart display
+        fig = px.pie(
+            names=["Low", "Medium", "High"],
+            values=[risk["low"],risk["medium"],risk["high"]],
+            hole=0.4,
+            title="Risk Level Distribution",
+            color=["Low", "Medium", "High"],
+            color_discrete_map={"Low": "green", "Medium": "gold", "High": "red"}
+        )
+        fig.update_traces(textinfo="percent+label")
+        risk_donut = fig.to_html(full_html=False)
+
         return render_template("results.html", results=results, keywords=keywords,
                                pii_count=pii_count_display, pii_keywords=pii_convert, phi_count=phi_count_display, phi_keywords=phi_convert,
                                finance_hdv_count=finance_hdv_display, fhdv_keywords=fhdv_convert, sq_keywords =sq_convert,
-                               security_count=security_display,risk=risk)
+                               security_count=security_display,risk=risk, risk_donut=risk_donut)
 
     except ValueError as e:
         return {"error": str(e)}, 500
