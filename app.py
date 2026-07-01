@@ -8,22 +8,22 @@ import plotly.express as px
 #Idea: Add an option to type custom keywords
 # Idea: Suggested keywords depending on selection. To avoid too many words found, suggest keywords to search
 
-def keyword_addition(list_name, keyword_list, all_keywords):
-    for selection in list_name:
-        if selection in keyword_list:
-            all_keywords.extend(keyword_list[selection])
+def add_keywords(keyword_ids, all_keywords):
+    for keyword_id in keyword_ids:
+        if keyword_id in TERMS:
+            all_keywords.extend(TERMS[keyword_id]["keywords"])
 
-def convert_to_labels(label_dict,count_dict):
+def convert_to_labels(count_dict):
     return {
-        label_dict.get(key, key): value
+        TERMS[key]["label"]: value
         for key, value in count_dict.items()
     }
 
-def checkbox_selections(selected_options, keyword_list):
+def checkbox_selections(selected):
     return {
-        key: keyword_list[key]
-        for key in selected_options
-        if key in keyword_list
+        term: TERMS[term]["keywords"]
+        for term in selected
+        if term in TERMS
     }
 
 def calculate_average_risk(*count_dicts):
@@ -40,7 +40,7 @@ def calculate_average_risk(*count_dicts):
             if count == 0:
                 continue
 
-            risk = TERM_RISK_LEVELS.get(category, 0)
+            risk = TERMS[category]["risk"]
 
             total_risk += risk * count
             total_findings += count
@@ -62,12 +62,17 @@ def calculate_average_risk(*count_dicts):
         "total": total_findings
     }
 
+
 app = Flask(__name__)
 dash_app = init_dashboard(app)
 
 @app.route("/")
 def home():
     return render_template("index.html")
+
+@app.route("/settings")
+def settings():
+    return render_template("settings.html")
 
 @app.route("/results", methods=["POST"])
 def upload_file():
@@ -89,41 +94,41 @@ def upload_file():
 
         # Taking values from DEFAULT_KEYWORDS and changing it into list
         all_keywords = []
-        for keywords in DEFAULT_KEYWORDS.values():
-            all_keywords.extend(keywords)
 
-        keyword_addition(DEFAULT_KEYWORDS.keys(), DEFAULT_KEYWORDS, all_keywords)
-        keyword_addition(pii_selections, PII_KEYWORDS, all_keywords)
-        keyword_addition(phi_selections, PHI_KEYWORDS, all_keywords)
-        keyword_addition(finance_hdv, FINANCE_HDV, all_keywords)
-        keyword_addition(security, SECURITY, all_keywords)
+        #always including default terms
+        add_keywords(CATEGORIES["default"], all_keywords)
+
+        add_keywords(pii_selections, all_keywords)
+        add_keywords(phi_selections, all_keywords)
+        add_keywords(finance_hdv, all_keywords)
+        add_keywords(security, all_keywords)
 
         keywords = keyword_finder(content, all_keywords)
 
         # returning new dictionary for selected terms and only displaying selected terms
-        selected_pii = checkbox_selections(pii_selections, PII_KEYWORDS)
+        selected_pii = checkbox_selections(pii_selections)
         pii_count = keyword_count(content, selected_pii)
-        pii_count_display = convert_to_labels(PII_LABELS, pii_count)
+        pii_count_display = convert_to_labels(PII_LABELS)
         pii_keywords = keyword_hits(content, selected_pii)
-        pii_convert = terms_to_labels(PII_LABELS, pii_keywords)
+        pii_convert = terms_to_labels(pii_keywords)
 
-        selected_phi = checkbox_selections(phi_selections, PHI_KEYWORDS)
+        selected_phi = checkbox_selections(phi_selections)
         phi_count = keyword_count(content, selected_phi)
-        phi_count_display = convert_to_labels(PHI_LABELS, phi_count)
+        phi_count_display = convert_to_labels(PHI_LABELS)
         phi_keywords = keyword_hits(content, selected_phi)
-        phi_convert = terms_to_labels(PHI_LABELS, phi_keywords)
+        phi_convert = terms_to_labels(phi_keywords)
 
-        selected_finance = checkbox_selections(finance_hdv, FINANCE_HDV)
+        selected_finance = checkbox_selections(finance_hdv)
         finance_hdv_count = keyword_count(content, selected_finance)
-        finance_hdv_display = convert_to_labels(FINANCE_HDV_LABELS, finance_hdv_count)
+        finance_hdv_display = convert_to_labels(FINANCE_HDV_LABELS)
         fhdv_keywords = keyword_hits(content, selected_finance)
-        fhdv_convert = terms_to_labels(FINANCE_HDV_LABELS, fhdv_keywords)
+        fhdv_convert = terms_to_labels(fhdv_keywords)
 
-        selected_security = checkbox_selections(security, SECURITY)
+        selected_security = checkbox_selections(security)
         security_count = keyword_count(content, selected_security)
-        security_display = convert_to_labels(SECURITY_LABELS, security_count)
+        security_display = convert_to_labels(SECURITY_LABELS)
         sq_keywords = keyword_hits(content, selected_security)
-        sq_convert = terms_to_labels(SECURITY_LABELS, sq_keywords)
+        sq_convert = terms_to_labels(sq_keywords)
 
         risk = calculate_average_risk(pii_count,phi_count,finance_hdv_count,security_count)
 

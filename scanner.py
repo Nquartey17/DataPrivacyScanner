@@ -1,4 +1,5 @@
 import re
+from lists import *
 
 PII_KEYWORDS = ["date of birth","dob", "born", "ssn", "social security", "email", "phone number", "DL", "driver's license",
                 "alien", "passport"]
@@ -49,9 +50,10 @@ def keyword_hits(text, keyword_list):
 
     return results
 
-def terms_to_labels(label_dict, findings_dict):
+def terms_to_labels(findings_dict):
     return {
-        label_dict.get(key, key):value for key,value in findings_dict.items()
+        TERMS[key]["label"]: value
+        for key,value in findings_dict.items()
     }
 
 
