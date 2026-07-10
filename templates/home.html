@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<!--
+	Eventually by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Eventually by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<header id="header">
+				<h1>Data Privacy Scanner</h1>
+                <p>Upload PDF, DOCX, TXT, CSV, XLS, and XLSX files.<br>
+                Detect common sensitive data using regex and keyword matching.<br>
+                Findings by risk level.<br>
+                Visualize scan metrics with interactive Plotly charts.</p>
+			</header>
+
+		<!-- Signup Form -->
+			<form id="signup-form" method="get" action="{{ url_for('index') }}">
+				<input type="submit" value="Start here" />
+			</form>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<ul class="icons">
+					<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+					<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+					<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+					<li><a href="#" class="icon fa-envelope"><span class="label">Email</span></a></li>
+				</ul>
+				<ul class="copyright">
+					<li>&copy; Untitled.</li><li>Credits: <a href="http://html5up.net">HTML5 UP</a></li>
+				</ul>
+			</footer>
+
+		<!-- Scripts -->
+            <script>
+            window.bgImages = {
+                "{{ url_for('static', filename='images/bg01.jpg') }}": "center",
+                "{{ url_for('static', filename='images/bg02.jpg') }}": "center",
+                "{{ url_for('static', filename='images/bg03.jpg') }}": "center"
+            };
+            </script>
+			<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+
+	</body>
+</html>
