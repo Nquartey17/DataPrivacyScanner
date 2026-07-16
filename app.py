@@ -1,8 +1,12 @@
+import os
+
 from flask import Flask, request, render_template
 from scanner import text_scan, keyword_finder, keyword_count, keyword_hits, terms_to_labels
 from conversion import extract_text
-from dashboard import init_dashboard
 from lists import *
+from models import db
+from werkzeug.security import generate_password_hash
+from flask_login import LoginManager
 import plotly.express as px
 
 #Idea: Add an option to type custom keywords
@@ -64,7 +68,21 @@ def calculate_average_risk(*count_dicts):
 
 
 app = Flask(__name__)
-dash_app = init_dashboard(app)
+
+app.config["SECRET_KEY"] = os.environ["SECRET_KEY"]
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
+db.init_app(app) #Connect SQLAlchemy to Flask
+
+with app.app_context():
+    db.create_all()
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+# Verify password
+# if check_password_hash(user.password, entered_password):
+#     print("Correct")
 
 @app.route("/")
 def home():
