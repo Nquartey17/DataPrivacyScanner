@@ -1,6 +1,10 @@
 {% include 'header.html' %}
 
 <br><br><br>
+
+<h1>{% if current_user.is_authenticated %}
+    Hello {{ current_user.username }}
+{% endif %}</h1>
 <div class="page-wrapper">
   <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data" class="form">
     <span class="form-title">Upload your file</span>

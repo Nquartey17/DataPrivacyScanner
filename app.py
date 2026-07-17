@@ -1,71 +1,16 @@
 import os
 
-from flask import Flask, request, render_template
-from scanner import text_scan, keyword_finder, keyword_count, keyword_hits, terms_to_labels
+from flask import Flask, request, render_template, redirect, url_for,flash
+from scanner import *
 from conversion import extract_text
 from lists import *
-from models import db
-from werkzeug.security import generate_password_hash
-from flask_login import LoginManager
+from models import db, User
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 import plotly.express as px
 
 #Idea: Add an option to type custom keywords
 # Idea: Suggested keywords depending on selection. To avoid too many words found, suggest keywords to search
-
-def add_keywords(keyword_ids, all_keywords):
-    for keyword_id in keyword_ids:
-        if keyword_id in TERMS:
-            all_keywords.extend(TERMS[keyword_id]["keywords"])
-
-def convert_to_labels(count_dict):
-    return {
-        TERMS[key]["label"]: value
-        for key, value in count_dict.items()
-    }
-
-def checkbox_selections(selected):
-    return {
-        term: TERMS[term]["keywords"]
-        for term in selected
-        if term in TERMS
-    }
-
-def calculate_average_risk(*count_dicts):
-    total_risk = 0
-    total_findings = 0
-
-    low = 0
-    medium = 0
-    high = 0
-
-    for counts in count_dicts:
-        for category, count in counts.items():
-            #Skip term if count == 0
-            if count == 0:
-                continue
-
-            risk = TERMS[category]["risk"]
-
-            total_risk += risk * count
-            total_findings += count
-
-            if risk == 1:
-                low += count
-            elif risk == 2:
-                medium += count
-            elif risk == 3:
-                high += count
-
-    average = round(total_risk / total_findings, 2) if total_findings else 0
-
-    return {
-        "average": average,
-        "low": low,
-        "medium": medium,
-        "high": high,
-        "total": total_findings
-    }
-
 
 app = Flask(__name__)
 
@@ -76,31 +21,87 @@ db.init_app(app) #Connect SQLAlchemy to Flask
 with app.app_context():
     db.create_all()
 
-# login_manager = LoginManager()
-# login_manager.init_app(app)
-# login_manager.login_view = "login"
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
 
 # Verify password
 # if check_password_hash(user.password, entered_password):
 #     print("Correct")
+# hashed = generate_password_hash()
 
 @app.route("/")
 def home():
     return render_template("home.html")
 
 @app.route("/index")
+@login_required
 def index():
     return render_template("index.html")
 
-@app.route("/login")
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.get(User, int(user_id))
+
+@app.route("/login", methods=["GET","POST"])
 def login():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        password = request.form["password"]
+
+        user = User.query.filter_by(username=username).first()
+
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for("index"))
+
+        flash("Invalid username or password")
+
     return render_template("login.html")
 
+@app.route("/register", methods=["GET","POST"])
+def register():
+
+    if request.method == "POST":
+        print(request.form)
+
+        username = request.form["username"]
+        password = request.form["password"]
+
+        # Check for existing users
+        existing_user = User.query.filter_by(username=username).first()
+
+        if existing_user:
+            flash("Username already exists")
+            return redirect(url_for("register"))
+
+        hashed = generate_password_hash(password)
+
+        user = User(username=username, password=hashed)
+
+        db.session.add(user)
+        db.session.commit()
+
+        login_user(user) #Automatic login in
+
+        return redirect(url_for("login"))
+    return render_template("register.html")
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("login"))
+
 @app.route("/settings")
+@login_required
 def settings():
     return render_template("settings.html")
 
 @app.route("/results", methods=["POST"])
+@login_required
 def upload_file():
     file = request.files.get("files")
 
