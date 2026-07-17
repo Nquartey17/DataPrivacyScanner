@@ -76,9 +76,9 @@ db.init_app(app) #Connect SQLAlchemy to Flask
 with app.app_context():
     db.create_all()
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "login"
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+# login_manager.login_view = "login"
 
 # Verify password
 # if check_password_hash(user.password, entered_password):
@@ -91,6 +91,10 @@ def home():
 @app.route("/index")
 def index():
     return render_template("index.html")
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
 
 @app.route("/settings")
 def settings():
