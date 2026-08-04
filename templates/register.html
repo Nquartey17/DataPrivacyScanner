@@ -26,15 +26,30 @@
                                 <h6 class="h5 mb-0">Protect Your Data Today</h6>
                                 <p class="text-muted mt-2 mb-5">Create a username and password to start scanning your files.</p>
 
+                                <!-- Existing username error -->
+                                {% with messages = get_flashed_messages(with_categories=true) %}
+                                    {% if messages %}
+                                        {% for category, message in messages %}
+                                            <div class="alert alert-danger">{{ message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endwith %}
+
                                 <form method="POST" action="{{ url_for('register') }}">
                                     <div class="form-group">
-                                        <label for="username">Create Username</label>
+                                        <label for="username">Create Username (Case sensitive)</label>
                                         <input type="text" name="username" class="form-control" id="username" required>
                                     </div>
-                                    <div class="form-group mb-5">
+                                    <div class="form-group">
                                         <label for="password">Password</label>
                                         <input type="password" name="password" class="form-control" id="password" required>
                                     </div>
+                                    <div class="form-group mb-5">
+                                        <label for="confirm_password">Confirm Password</label>
+                                        <input type="password" name="confirm_password" class="form-control" id="confirm_password" required>
+                                    </div>
+
+
                                     <button type="submit" class="btn btn-theme">Create Account</button>
                                     <a href="#l" class="forgot-link float-right text-primary">Forgot password?</a>
                                 </form>
@@ -59,6 +74,8 @@
             <!-- end card -->
 
             <p class="text-muted text-center mt-3 mb-0">Already have an account? Sign in here <a href="{{ url_for('login') }}" class="text-primary ml-1">Login</a></p>
+            <br>
+            <p class="text-muted text-center mt-3 mb-0"><a href="{{ url_for('home') }}" class="text-primary ml-1">Return to home</a></p>
 
             <!-- end row -->
 
@@ -67,4 +84,22 @@
     </div>
     <!-- Row -->
 </div>
+
+<!--Prevent form submission if passwords don't match and informs user-->
+<script>
+const password = document.getElementById("password");
+const confirm = document.getElementById("confirm_password");
+
+function validatePasswords() {
+    if (password.value !== confirm.value) {
+        confirm.setCustomValidity("Passwords do not match.");
+    } else {
+        confirm.setCustomValidity("");
+    }
+}
+
+password.addEventListener("input", validatePasswords);
+confirm.addEventListener("input", validatePasswords);
+</script>
+
 </body>

@@ -69,14 +69,14 @@ def register():
 
         username = request.form["username"]
         password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
 
         # Check for existing users
         existing_user = User.query.filter_by(username=username).first()
 
         if existing_user:
             flash("Username already exists")
-            return redirect(url_for("register"))
-
+            return render_template("register.html")
         hashed = generate_password_hash(password)
 
         user = User(username=username, password=hashed)
