@@ -125,6 +125,7 @@ def upload_file():
         #always including default terms
         add_keywords(CATEGORIES["default"], all_keywords)
 
+
         add_keywords(pii_selections, all_keywords)
         add_keywords(phi_selections, all_keywords)
         add_keywords(finance_hdv, all_keywords)
@@ -163,13 +164,32 @@ def upload_file():
         fig = px.pie(
             names=["Low", "Medium", "High"],
             values=[risk["low"],risk["medium"],risk["high"]],
-            hole=0.4,
+            hole=0.5,
             title="Risk Level Distribution",
             color=["Low", "Medium", "High"],
             color_discrete_map={"Low": "green", "Medium": "gold", "High": "red"}
         )
         fig.update_traces(textinfo="percent+label")
-        risk_donut = fig.to_html(full_html=False)
+
+        fig.add_annotation(
+            text=f"Terms Found:<br><b>{risk['total']}</b>",
+            x=0.5,
+            y=0.5,
+            xref="paper",
+            yref="paper",
+            showarrow=False,
+            font=dict(size=20)
+        )
+
+        fig.update_layout(
+            autosize=True,
+            margin=dict(l=20, r=20, t=50, b=20)
+        )
+
+        risk_donut = fig.to_html(
+            full_html=False,
+            config={"responsive": True}
+        )
 
         return render_template("results.html", results=results, keywords=keywords,
                                pii_count=pii_count_display, pii_keywords=pii_convert, phi_count=phi_count_display, phi_keywords=phi_convert,

@@ -1,17 +1,92 @@
 {% include 'header.html' %}
 
+<style>
+.chart-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.chart-container .plotly-graph-div {
+    width: 100% !important;
+}
+
+.risk-card {
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.risk-chart {
+    width: 100%;
+}
+
+.risk-summary {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.risk-summary div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.risk-summary span {
+    font-size: 13px;
+    color: #777;
+}
+
+.risk-summary strong {
+    font-size: 16px;
+    color: #222;
+}
+</style>
+
 <br><br><br>
 
 <h2>Statistics and Findings</h2>
 
-<p>{{ risk_donut | safe }}</p>
+<div class="risk-card">
 
-<h5>Number of terms found: </h5>
-<p>Total: {{ risk.total }}</p>
-<p>Low risk terms: {{ risk.low }}/{{ risk.total }}</p>
-<p>Medium risk terms: {{ risk.medium }}/{{ risk.total }}</p>
-<p>High risk terms: {{ risk.high }}/{{ risk.total }}</p>
-<p>Average risk level: {{ risk.average }}</p>
+    <div class="risk-chart">
+        {{ risk_donut | safe }}
+    </div>
+
+    <div class="risk-summary">
+        <div>
+            <span>Total</span>
+            <strong>{{ risk.total }}</strong>
+        </div>
+
+        <div>
+            <span>Low Risk</span>
+            <strong>{{ risk.low }}/{{ risk.total }}</strong>
+        </div>
+
+        <div>
+            <span>Medium Risk</span>
+            <strong>{{ risk.medium }}/{{ risk.total }}</strong>
+        </div>
+
+        <div>
+            <span>High Risk</span>
+            <strong>{{ risk.high }}/{{ risk.total }}</strong>
+        </div>
+
+        <div>
+            <span>Average Risk Score</span>
+            <strong>{{ risk.average }}/3</strong>
+        </div>
+    </div>
+
+</div>
 
 <h5>Extractions: </h5>
 <p>{{ results }}</p>

@@ -109,18 +109,3 @@ def calculate_average_risk(*count_dicts):
         "high": high,
         "total": total_findings
     }
-
-if __name__ == "__main__":
-    sample_text = """
-    John Doe was born on 01/15/1990.
-    His email is john.doe@example.com and phone number is 123-456-7890.
-    SSN: 123-45-6789.
-    456-18-8564
-    He visited the doctor for diagnosis and treatment.
-    """
-
-    # print("PII Scan Results:")
-    # print(text_scan(sample_text))
-
-    print("Keywords found:")
-    print(keyword_finder(sample_text, PII_KEYWORDS + PHI_KEYWORDS))
