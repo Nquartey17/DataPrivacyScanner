@@ -1,5 +1,6 @@
 import re
 from lists import *
+import plotly.express as px
 
 PII_KEYWORDS = ["date of birth","dob", "born", "ssn", "social security", "email", "phone number", "DL", "driver's license",
                 "alien", "passport"]
@@ -22,12 +23,20 @@ def text_scan(text):
     #
     # return {"results":results, "count": count}
 
-def keyword_count(text, keyword_list):
+def keyword_count(text, keyword_dict):
     text = text.lower()
 
-    return {
-        keyword: text.count(keyword.lower()) for keyword in keyword_list
-    }
+    results = {}
+
+    for category, keywords in keyword_dict.items():
+        count = 0
+
+        for keyword in keywords:
+            count += text.count(keyword.lower())
+
+        results[category] = count
+
+    return results
 
 # combine lists if you want to highlight instances of all words
 def keyword_finder(text, keywords):
@@ -109,3 +118,34 @@ def calculate_average_risk(*count_dicts):
         "high": high,
         "total": total_findings
     }
+
+def create_bar_chart(counts, title, color):
+    fig = px.bar(
+        x=list(counts.values()),
+        y=list(counts.keys()),
+        orientation="h",
+        title=title,
+        labels={
+            "x": "Number of Findings",
+            "y": "Term"
+        },
+        color_discrete_sequence=[color]
+    )
+
+    fig.update_layout(
+        height=300,
+        margin=dict(l=20, r=20, t=50, b=20),
+        yaxis=dict(
+            categoryorder="total ascending"
+        )
+    )
+
+    fig.update_traces(
+        texttemplate="%{x}",
+        textposition="outside"
+    )
+
+    return fig.to_html(
+        full_html=False,
+        config={"responsive": True}
+    )

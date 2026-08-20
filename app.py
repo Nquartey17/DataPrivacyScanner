@@ -183,6 +183,7 @@ def upload_file():
 
         fig.update_layout(
             autosize=True,
+            height=350,
             margin=dict(l=20, r=20, t=50, b=20)
         )
 
@@ -191,10 +192,13 @@ def upload_file():
             config={"responsive": True}
         )
 
+        #pii bar graph
+        pii_bar = create_bar_chart(phi_count,"PII Findings","#4C78A8")
+
         return render_template("results.html", results=results, keywords=keywords,
-                               pii_count=pii_count_display, pii_keywords=pii_convert, phi_count=phi_count_display, phi_keywords=phi_convert,
-                               finance_hdv_count=finance_hdv_display, fhdv_keywords=fhdv_convert, sq_keywords =sq_convert,
-                               security_count=security_display,risk=risk, risk_donut=risk_donut)
+                               pii_count=pii_count, pii_keywords=pii_convert, phi_count=phi_count, phi_keywords=phi_convert,
+                               finance_hdv_count=finance_hdv_count, fhdv_keywords=fhdv_convert, sq_keywords =sq_convert,
+                               security_count=security_count,risk=risk, risk_donut=risk_donut,pii_bar=pii_bar)
 
     except ValueError as e:
         return {"error": str(e)}, 500

@@ -47,6 +47,16 @@
     font-size: 16px;
     color: #222;
 }
+
+.bar-chart-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
 </style>
 
 <br><br><br>
@@ -95,6 +105,9 @@
 <p>{{ keywords }}</p>
 
 <h5>PII findings: </h5>
+<div class="bar-chart-container">
+    {{ pii_bar | safe }}
+</div>
 <p>{{ pii_count }}</p>
 <p>{{ pii_keywords }}</p>
 
