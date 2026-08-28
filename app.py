@@ -77,6 +77,11 @@ def register():
         if existing_user:
             flash("Username already exists")
             return render_template("register.html")
+
+        if password != confirm_password:
+            flash("Passwords do not match")
+            return render_template("register.html")
+
         hashed = generate_password_hash(password)
 
         user = User(username=username, password=hashed)
@@ -85,8 +90,7 @@ def register():
         db.session.commit()
 
         login_user(user) #Automatic login in
-
-        return redirect(url_for("login"))
+        return redirect(url_for("index"))
     return render_template("register.html")
 
 @app.route("/logout")
@@ -136,25 +140,21 @@ def upload_file():
         # returning new dictionary for selected terms and only displaying selected terms
         selected_pii = checkbox_selections(pii_selections)
         pii_count = keyword_count(content, selected_pii)
-        pii_count_display = convert_to_labels(PII_LABELS)
         pii_keywords = keyword_hits(content, selected_pii)
         pii_convert = terms_to_labels(pii_keywords)
 
         selected_phi = checkbox_selections(phi_selections)
         phi_count = keyword_count(content, selected_phi)
-        phi_count_display = convert_to_labels(PHI_LABELS)
         phi_keywords = keyword_hits(content, selected_phi)
         phi_convert = terms_to_labels(phi_keywords)
 
         selected_finance = checkbox_selections(finance_hdv)
         finance_hdv_count = keyword_count(content, selected_finance)
-        finance_hdv_display = convert_to_labels(FINANCE_HDV_LABELS)
         fhdv_keywords = keyword_hits(content, selected_finance)
         fhdv_convert = terms_to_labels(fhdv_keywords)
 
         selected_security = checkbox_selections(security)
         security_count = keyword_count(content, selected_security)
-        security_display = convert_to_labels(SECURITY_LABELS)
         sq_keywords = keyword_hits(content, selected_security)
         sq_convert = terms_to_labels(sq_keywords)
 
@@ -193,12 +193,16 @@ def upload_file():
         )
 
         #pii bar graph
-        pii_bar = create_bar_chart(phi_count,"PII Findings","#4C78A8")
+        pii_bar = create_bar_chart(convert_keys_to_labels(pii_count),"PII Findings","#4C78A8")
+        phi_bar = create_bar_chart(convert_keys_to_labels(phi_count), "PHI Findings", "#4C78A8")
+        fhdv_bar = create_bar_chart(convert_keys_to_labels(finance_hdv_count), "Finance and HDV Findings", "#4C78A8")
+        sq_bar = create_bar_chart(convert_keys_to_labels(security_count), "Security Finding", "#4C78A8")
+
 
         return render_template("results.html", results=results, keywords=keywords,
-                               pii_count=pii_count, pii_keywords=pii_convert, phi_count=phi_count, phi_keywords=phi_convert,
-                               finance_hdv_count=finance_hdv_count, fhdv_keywords=fhdv_convert, sq_keywords =sq_convert,
-                               security_count=security_count,risk=risk, risk_donut=risk_donut,pii_bar=pii_bar)
+                               pii_keywords=pii_convert, phi_keywords=phi_convert,fhdv_keywords=fhdv_convert,
+                               sq_keywords =sq_convert,risk=risk, risk_donut=risk_donut,pii_bar=pii_bar,
+                               phi_bar=phi_bar,fhdv_bar=fhdv_bar, sq_bar=sq_bar)
 
     except ValueError as e:
         return {"error": str(e)}, 500

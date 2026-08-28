@@ -1,5 +1,6 @@
 {% include 'header.html' %}
 
+<!--Will move to separate CSS file later-->
 <style>
 .chart-container {
     width: 100%;
@@ -98,27 +99,39 @@
 
 </div>
 
-<h5>Extractions: </h5>
-<p>{{ results }}</p>
+<br>
+<h4>Extractions:</h4>
+{% for key, values in results.items() %}
+    <h6><b>{{ key }}:</b></h6>
 
-<h5>Terms found: </h5>
+    {% if values %}
+        {% for value in values %}
+            <p>{{ value }}</p>
+        {% endfor %}
+    {% else %}
+        <p>No extractions found</p>
+    {% endif %}
+{% endfor %}
+
+<h5>All keywords found: </h5>
 <p>{{ keywords }}</p>
 
-<h5>PII findings: </h5>
 <div class="bar-chart-container">
     {{ pii_bar | safe }}
 </div>
-<p>{{ pii_count }}</p>
-<p>{{ pii_keywords }}</p>
 
-<h5>PHI findings: </h5>
-<p>{{ phi_count }}</p>
+
+<div class="bar-chart-container">
+    {{ phi_bar | safe }}
+</div>
 <p>{{ phi_keywords }}</p>
 
-<h5>Finance & HDV findings: </h5>
-<p>{{ finance_hdv_count }}</p>
+<div class="bar-chart-container">
+    {{ fhdv_bar | safe }}
+</div>
 <p>{{ fhdv_keywords }}</p>
 
-<h5>Security findings: </h5>
-<p>{{ security_count }}</p>
+<div class="bar-chart-container">
+    {{ sq_bar | safe }}
+</div>
 <p>{{ sq_keywords }}</p>

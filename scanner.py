@@ -1,22 +1,15 @@
 import re
 from lists import *
 import plotly.express as px
-
-PII_KEYWORDS = ["date of birth","dob", "born", "ssn", "social security", "email", "phone number", "DL", "driver's license",
-                "alien", "passport"]
-PHI_KEYWORDS = ["history", "social", "family", "treatment", "therapy", "CPT", "diagnosis",
-                "DX", "lab", "results", "physician", "doctor", "MRN", "patient"]
-FERPA = ["attendance", "class", "grade", "suspension", "disciplinary", "expulsion"]
-GDPR = ["religion", "union", "resume"]
-ADDITIONAL = ["biometric", "fingerprint", "security questions", "username", "password", "PW", "user"]
+import pandas as pd
 
 def text_scan(text):
     return {
         #re.findall - finds all matches of regular expressions
         #\S - Letters, numbers, symbols, and punctuation
-        "ssn": re.findall(r'\b\d{3}-\d{2}-\d{4}\b', text),
-        "emails": re.findall(r'\S+@\S+', text),
-        "phones": re.findall(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b', text)
+        "SSNs": re.findall(r'\b\d{3}-\d{2}-\d{4}\b', text),
+        "Emails": re.findall(r'\S+@\S+', text),
+        "Phone numbers": re.findall(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b', text)
     }
 
     # count = {key: len(value) for key, value in results.items()}
@@ -83,6 +76,10 @@ def checkbox_selections(selected):
         if term in TERMS
     }
 
+# Convert dict key to label equivalent (dob -> Date of Birth)
+def convert_keys_to_labels(counts):
+    return { TERMS[key]["label"]: count for key, count in counts.items() }
+
 def calculate_average_risk(*count_dicts):
     total_risk = 0
     total_findings = 0
@@ -120,14 +117,21 @@ def calculate_average_risk(*count_dicts):
     }
 
 def create_bar_chart(counts, title, color):
+    # Using data frame to explicitly state which columns to use to prevent errors
+    df = pd.DataFrame({
+        "Term": list(counts.keys()),
+        "Count": list(counts.values())
+    })
+
     fig = px.bar(
-        x=list(counts.values()),
-        y=list(counts.keys()),
+        df,
+        x="Count",
+        y="Term",
         orientation="h",
         title=title,
         labels={
-            "x": "Number of Findings",
-            "y": "Term"
+            "Count": "Number of Findings",
+            "Term": "Term"
         },
         color_discrete_sequence=[color]
     )
@@ -135,9 +139,7 @@ def create_bar_chart(counts, title, color):
     fig.update_layout(
         height=300,
         margin=dict(l=20, r=20, t=50, b=20),
-        yaxis=dict(
-            categoryorder="total ascending"
-        )
+        yaxis=dict(categoryorder="total ascending")
     )
 
     fig.update_traces(
