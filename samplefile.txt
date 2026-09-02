@@ -1,0 +1,12 @@
+Hello, my email is test@gmail.com. My home phone number is 123-456-7890 and my cell number is 098-765-4321.
+My date of birth is 1/1/1999 and my SSN is 012-34-5678. I do not have a driver's license, but I do have a US passport.
+
+Information from my most recent visit at my physician included these findings;
+My TX codes were, 99023, 99025, and 99072. I was diagnosed with hypertension (DX:I10) and prescribed Furosemide.
+My lab results were normal and all this can be found through my MRN: 99999999.
+
+I was billed through my credit card ending in 1234, and Medicare will cover 90% of the cost of my medication.
+
+You can access my Data Privacy Scanner account using these credentials;
+Username: test
+Password: test
