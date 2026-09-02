@@ -4,3 +4,5 @@ werkzeug
 plotly
 pandas
 pdfplumber
+python-docx
+gunicorn
