@@ -1,5 +1,6 @@
 # Data Privacy Scanner (Beta)
-A web-based tool that analyzes uploaded documents and text for potentially sensitive PII or PHI data.
+- A web-based tool that analyzes uploaded documents and text for potentially sensitive PII or PHI data.
+  - 🌐 Live Demo: https://dataprivacyscanner-inh9.onrender.com
 
 ## 🚀 Features
 - Document Scanning
